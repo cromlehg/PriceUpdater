@@ -14,6 +14,8 @@ import com.typesafe.config.Config
 import eth.contracts.ContractViewver
 import eth.contracts.PriceGetter
 import play.api.libs.ws.WSClient
+import play.Logger
+import eth.contracts.PriceUpdater
 
 @Singleton
 class AppController @Inject() (cc: ControllerComponents, dao: DAO, config: Config, ws: WSClient)(implicit ec: ExecutionContext)
@@ -22,6 +24,8 @@ class AppController @Inject() (cc: ControllerComponents, dao: DAO, config: Confi
   import scala.concurrent.Future.{ successful => future }
 
   val contractViewer = new ContractViewver(config)
+
+  val priceUpdater = new PriceUpdater(config)
 
   val priceGetter = new PriceGetter(ws)
 
@@ -38,10 +42,18 @@ class AppController @Inject() (cc: ControllerComponents, dao: DAO, config: Confi
     }
   }
 
-  def controlForceUpdate() = Action.async { implicit request =>
+  def forceUpdate() = Action.async { implicit request =>
     implicit val ac = new AppContext()
     onlyAuthorized { account =>
-      future(Ok(views.html.app.forceUpdate()))
+      Logger.debug("Force price update processing...")
+      priceGetter.futureResult map { result =>
+        Logger.debug("Ethereum price - " + result + "$")
+        val toUpdate = result.replace(".", "")
+        Logger.debug("To update - " + toUpdate)
+        val hash = priceUpdater.updatePrice(toUpdate)
+        Logger.debug("Transaction hash: " + priceUpdater.updatePrice(toUpdate))
+        Redirect(routes.AppController.index).flashing("success" -> ("Price update transaction sendind with hash " + hash))
+      }
     }
   }
 
