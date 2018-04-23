@@ -25,7 +25,7 @@ class BaseActorTask @Inject() (actorSystem: ActorSystem, val dao: DAO, config: C
       Logger.debug("Ethereum price - " + result + "$")
       val toUpdate = result.replace(".", "")
       Logger.debug("To update - " + toUpdate)
-      priceUpdater.updatePrice(toUpdate)
+      Logger.debug("Transaction hash: " + priceUpdater.updatePrice(toUpdate))
       Logger.debug("Price has been updated")
     }
     Logger.debug("Price processed")
