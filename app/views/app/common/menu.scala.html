@@ -13,7 +13,6 @@
           @base.common.menuItem(active, "logout", routes.AccountsController.logout(), Some("sign-out-alt"))
         }
         @if(ac.authorizedOpt.isEmpty) {         
-          @base.common.menuItem(active, "register", routes.AccountsController.registerUser(), Some("user-plus"))
           @base.common.menuItem(active, "login", routes.AccountsController.login(), Some("sign-in-alt"))
         }
       </ul>

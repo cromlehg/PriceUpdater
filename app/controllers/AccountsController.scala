@@ -86,6 +86,7 @@ class AccountsController @Inject() (cc: ControllerComponents, dao: DAO, config: 
   }
 
   def processApproveRegister() = Action.async { implicit request =>
+    /*
     implicit val ac = new AppContext()
     notAuthorized {
       approveForm.bindFromRequest.fold(
@@ -102,11 +103,12 @@ class AccountsController @Inject() (cc: ControllerComponents, dao: DAO, config: 
               future(Ok(views.html.app.approveRegister(formWithErrors)(Flash(formWithErrors.data) + ("error" -> "Passwords should be equals"), implicitly, implicitly)))
             }
         })
-    }
+    }*/
+    future(BadRequest("Not implemented"))
   }
 
   def approveRegister(login: String, code: String) = Action.async { implicit request =>
-    implicit val ac = new AppContext()
+    /*implicit val ac = new AppContext()
     notAuthorized {
       dao.findAccountByConfirmCodeAndLogin(login, code) map (_.fold(BadRequest("Login or confirm code not found")) { account =>
         Ok(views.html.app.approveRegister(approveForm.fill(ApproveData(
@@ -117,7 +119,8 @@ class AccountsController @Inject() (cc: ControllerComponents, dao: DAO, config: 
           false,
           code))))
       })
-    }
+    }*/
+    future(BadRequest("Not implemented"))
   }
 
   private def baseRegisterChecks[T <: RegData](
@@ -141,7 +144,7 @@ class AccountsController @Inject() (cc: ControllerComponents, dao: DAO, config: 
   }
 
   def registerProcessUser() = Action.async { implicit request =>
-    implicit val ac = new AppContext()
+    /*implicit val ac = new AppContext()
     notAuthorized {
 
       def redirectWithError(msg: String, form: Form[_]) =
@@ -153,16 +156,20 @@ class AccountsController @Inject() (cc: ControllerComponents, dao: DAO, config: 
         }
       }
 
-    }
+    }*/
+    future(BadRequest("Not implemented"))
   }
 
   def logout = TODO
 
   def registerUser() = Action.async { implicit request =>
-    implicit val ac = new AppContext()
+    /*implicit val ac = new AppContext()
     notAuthorized {
       future(Ok(views.html.app.registerUser(regFormUser)))
     }
+    * 
+    */
+    future(BadRequest("Not implemented"))
   }
 
 }
