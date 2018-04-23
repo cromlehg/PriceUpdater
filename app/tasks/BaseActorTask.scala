@@ -19,13 +19,13 @@ class BaseActorTask @Inject() (actorSystem: ActorSystem, val dao: DAO, config: C
 
   val priceGetter = new PriceGetter(ws)
 
-  actorSystem.scheduler.schedule(initialDelay = 0.seconds, interval = 1.minute) {
+  actorSystem.scheduler.schedule(initialDelay = 0.seconds, interval = 20.minute) {
     Logger.debug("Request for price processing...")
     priceGetter.futureResult map { result =>
       Logger.debug("Ethereum price - " + result + "$")
       val toUpdate = result.replace(".", "")
       Logger.debug("To update - " + toUpdate)
-      //priceUpdater.updatePrice(toUpdate)
+      priceUpdater.updatePrice(toUpdate)
       Logger.debug("Price has been updated")
     }
     Logger.debug("Price processed")

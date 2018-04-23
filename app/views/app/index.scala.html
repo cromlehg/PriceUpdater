@@ -4,11 +4,22 @@
 
 @app.common.main("index") { } {
   @base.common.components.container() {
-      <h3 class="mb-4 text-center">Wellcome to contract service operator!</h3>
-      @base.common.components.table(Seq("peroperty", "value"), Seq(
-      	Seq("Contract address", address),
-      	Seq("Contract token price", price),
+    <h3 class="mb-5 mt-4 text-center">Wellcome to contract service operator!</h3>
+    @base.common.components.table(Seq("peroperty", "value"), Seq(
+   		Seq("Contract address", address),
+    	Seq("Contract token price", price),
       	Seq("Contract ETH hardcap", hardcap),
-      	Seq("Coinmarketcap USD per ETH", ethToUSDCoinmarketcap + " $")))      
+      	Seq("Coinmarketcap USD per ETH", ethToUSDCoinmarketcap + " $")))
+      	
+    @if(ac.authorizedOpt.isDefined) {
+    <div class="container bs-authreg-container">
+      <h3 class="mb-5 mt-4">Force update price</h2>
+      <p class="mb-5"></p>
+  
+      @b4.form(routes.AppController.controlForceUpdate()) {
+        @b4.submit('_class -> "mt-5", 'class -> "btn btn-outline-primary btn-block"){ Force update }   
+      }
+    </div>
+    }
   }
 } { }
