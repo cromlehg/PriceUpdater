@@ -48,11 +48,18 @@ class AppController @Inject() (cc: ControllerComponents, dao: DAO, config: Confi
       Logger.debug("Force price update processing...")
       priceGetter.futureResult map { result =>
         Logger.debug("Ethereum price - " + result + "$")
-        val toUpdate = result.replace(".", "")
-        Logger.debug("To update - " + toUpdate)
-        val hash = priceUpdater.updatePrice(toUpdate)
-        Logger.debug("Transaction hash: " + priceUpdater.updatePrice(toUpdate))
-        Redirect(routes.AppController.index).flashing("success" -> ("Price update transaction sendind with hash " + hash))
+        if (result.indexOf(".") > 0) {
+          var toUpdate = result.replace(".", "")
+          if (toUpdate.length() < 7) {
+            val count = 6 - toUpdate.length
+            for (_ <- 1 to count) toUpdate += "0"
+          } else if (toUpdate.length > 6) toUpdate = toUpdate.substring(0, 6)
+          Logger.debug("To update - " + toUpdate)
+          val hash = priceUpdater.updatePrice(toUpdate)
+          Logger.debug("Transaction hash: " + priceUpdater.updatePrice(toUpdate))
+          Redirect(routes.AppController.index).flashing("success" -> ("Price update transaction sendind with hash " + hash))
+        } else
+          Redirect(routes.AppController.index).flashing("error" -> ("Wrong price. " + result))
       }
     }
   }

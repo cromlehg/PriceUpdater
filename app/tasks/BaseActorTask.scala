@@ -23,10 +23,16 @@ class BaseActorTask @Inject() (actorSystem: ActorSystem, val dao: DAO, config: C
     Logger.debug("Request for price processing...")
     priceGetter.futureResult map { result =>
       Logger.debug("Ethereum price - " + result + "$")
-      val toUpdate = result.replace(".", "")
-      Logger.debug("To update - " + toUpdate)
-      Logger.debug("Transaction hash: " + priceUpdater.updatePrice(toUpdate))
-      Logger.debug("Price has been updated")
+      if (result.indexOf(".") > 0) {
+        var toUpdate = result.replace(".", "")
+        if (toUpdate.length() < 7) {
+          val count = 6 - toUpdate.length
+          for (_ <- 1 to count) toUpdate += "0"
+        } else if (toUpdate.length > 6) toUpdate = toUpdate.substring(0, 6)
+        Logger.debug("To update - " + toUpdate)
+        Logger.debug("Transaction hash: " + priceUpdater.updatePrice(toUpdate))
+        Logger.debug("Price has been updated")
+      }
     }
     Logger.debug("Price processed")
   }
