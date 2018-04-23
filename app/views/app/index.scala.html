@@ -1,0 +1,9 @@
+@()(implicit flash: Flash, messages: Messages, ac: controllers.AppContext)
+
+@implicitVerticalFC = @{ b4.vertical.fieldConstructor() }
+
+@app.common.main("index") { } {
+  @base.common.components.container() {
+      <h3>Wellcome!</h3>
+  }
+} { }
