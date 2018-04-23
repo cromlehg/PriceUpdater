@@ -11,7 +11,8 @@
       <ul class="navbar-nav ml-auto">
         @if(ac.authorizedOpt.isDefined) {
         }
-        @if(ac.authorizedOpt.isEmpty) {         
+        @if(ac.authorizedOpt.isEmpty) {
+          @base.common.menuItem(active, "force update", routes.AppController.controlForceUpdate(), Some("fa-user-plus"))         
           @base.common.menuItem(active, "register", routes.AccountsController.registerUser(), Some("fa-user-plus"))
           @base.common.menuItem(active, "login", routes.AccountsController.login(), Some("sign-in-alt"))
         }

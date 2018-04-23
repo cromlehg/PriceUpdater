@@ -18,22 +18,18 @@ import com.typesafe.config.Config
  */
 @Singleton
 class AppController @Inject() (cc: ControllerComponents, dao: DAO, config: Config)(implicit ec: ExecutionContext)
-  extends AbstractController(cc)
-  with I18nSupport {
+  extends Authorizable(cc, dao, config) {
 
   import scala.concurrent.Future.{ successful => future }
-
-  /**
-   * Create an Action to render an HTML page.
-   *
-   * The configuration in the `routes` file means that this method
-   * will be called when the application receives a `GET` request with
-   * a path of `/`.
-   */
 
   def index = Action.async { implicit request =>
     implicit val ac = new AppContext()
     future(Ok(views.html.app.index()))
+  }
+
+  def controlForceUpdate() = Action.async { implicit request =>
+    implicit val ac = new AppContext()
+    future(Ok(views.html.app.forceUpdate()))
   }
 
 }
