@@ -1,9 +1,14 @@
-@()(implicit flash: Flash, messages: Messages, ac: controllers.AppContext)
+@(price: String, hardcap: String, ethToUSDCoinmarketcap: String, address: String)(implicit flash: Flash, messages: Messages, ac: controllers.AppContext)
 
 @implicitVerticalFC = @{ b4.vertical.fieldConstructor() }
 
 @app.common.main("index") { } {
   @base.common.components.container() {
-      <h3>Wellcome!</h3>
+      <h3 class="mb-4 text-center">Wellcome to contract service operator!</h3>
+      @base.common.components.table(Seq("peroperty", "value"), Seq(
+      	Seq("Contract address", address),
+      	Seq("Contract token price", price),
+      	Seq("Contract ETH hardcap", hardcap),
+      	Seq("Coinmarketcap USD per ETH", ethToUSDCoinmarketcap + " $")))      
   }
 } { }

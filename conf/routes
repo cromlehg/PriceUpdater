@@ -4,24 +4,26 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET    /                                             controllers.AppController.index
+GET    /                                    controllers.AppController.index
 
-GET    /app/login                                    controllers.AccountsController.login()
+GET    /app/login                           controllers.AccountsController.login()
 
-+ nocsrf
-POST   /app/login                                    controllers.AccountsController.processLogin()
-
-GET    /app/register/user                            controllers.AccountsController.registerUser()
-
-GET    /app/update/force                            controllers.AppController.controlForceUpdate()
+GET    /app/logout                          controllers.AccountsController.logout()
 
 + nocsrf
-POST   /app/register/user                            controllers.AccountsController.registerProcessUser()
+POST   /app/login                           controllers.AccountsController.processLogin()
 
-GET    /app/register/approve/:login/:code            controllers.AccountsController.approveRegister(login: String, code: String)
+GET    /app/register/user                   controllers.AccountsController.registerUser()
+
+GET    /app/update/force                    controllers.AppController.controlForceUpdate()
 
 + nocsrf
-POST   /app/register/approve                         controllers.AccountsController.processApproveRegister()
+POST   /app/register/user                   controllers.AccountsController.registerProcessUser()
+
+GET    /app/register/approve/:login/:code   controllers.AccountsController.approveRegister(login: String, code: String)
+
++ nocsrf
+POST   /app/register/approve                controllers.AccountsController.processApproveRegister()
 
 # Map static resources from the /public folder to the /assets URL path
-GET    /assets/*file                                 controllers.Assets.versioned(path="/public", file: Asset)
+GET    /assets/*file                        controllers.Assets.versioned(path="/public", file: Asset)

@@ -24,3 +24,6 @@ CREATE TABLE accounts (
   registered                BIGINT UNSIGNED NOT NULL,
   confirm_code              VARCHAR(100)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+
+

@@ -2,9 +2,7 @@ package controllers
 
 object AppConstants {
 
-  val APP_NAME = "Blockwit Updater"
-
-  val BACKEND_NAME = "Backed Core v0.1"
+  val APP_NAME = "Blockwit service"
 
   val PWD_MIN_LENGTH = 10
 

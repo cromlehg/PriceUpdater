@@ -13,6 +13,8 @@ scalaVersion := "2.12.3"
 
 libraryDependencies += guice
 
+libraryDependencies += ws
+
 libraryDependencies += "org.web3j" % "core" % "3.3.1"
 
 libraryDependencies += "com.github.t3hnar" %% "scala-bcrypt" % "3.1"

@@ -1,52 +1,26 @@
 package controllers
 
 import scala.concurrent.ExecutionContext
-
-import com.typesafe.config.Config
-
-import javax.inject.Inject
-import javax.inject.Singleton
-import models.daos.DAO
-import play.api.mvc.ControllerComponents
-import scala.util.Random
-
-import play.api.data.Forms.email
-import play.api.data.Forms.text
-import play.api.data.Forms.boolean
-import play.api.data.Forms.mapping
-import play.api.data.Forms.nonEmptyText
-import play.api.mvc.Flash
-
-import play.api.data.Form
-
-import java.io.IOException
-
-import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
+import scala.util.Random
 
 import org.mindrot.jbcrypt.BCrypt
 
-import com.sendgrid.Content
-import com.sendgrid.Email
-import com.sendgrid.Mail
-import com.sendgrid.Method
-import com.sendgrid.SendGrid
 import com.typesafe.config.Config
 
 import javax.inject.Inject
 import javax.inject.Singleton
-import models.AccountStatus
-import models.ErrCodes
 import models.daos.DAO
-import play.Logger
-import play.api.libs.json.JsArray
-import play.api.libs.json.JsValue
-import play.api.libs.json.Json
+import play.api.data.Form
+import play.api.data.Forms.boolean
+import play.api.data.Forms.email
+import play.api.data.Forms.mapping
+import play.api.data.Forms.nonEmptyText
 import play.api.mvc.ControllerComponents
+import play.api.mvc.Flash
 import play.api.mvc.Request
 import play.api.mvc.Result
 import play.twirl.api.Html
-import play.api.mvc.Action
 
 @Singleton
 class AccountsController @Inject() (cc: ControllerComponents, dao: DAO, config: Config)(implicit ec: ExecutionContext)
@@ -181,6 +155,8 @@ class AccountsController @Inject() (cc: ControllerComponents, dao: DAO, config: 
 
     }
   }
+
+  def logout = TODO
 
   def registerUser() = Action.async { implicit request =>
     implicit val ac = new AppContext()

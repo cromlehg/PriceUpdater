@@ -11,25 +11,38 @@ import play.api.mvc.AnyContent
 import play.api.mvc.ControllerComponents
 import play.api.mvc.Request
 import com.typesafe.config.Config
+import eth.contracts.ContractViewver
+import eth.contracts.PriceGetter
+import play.api.libs.ws.WSClient
 
-/**
- * This controller creates an `Action` to handle HTTP requests to the
- * application's home page.
- */
 @Singleton
-class AppController @Inject() (cc: ControllerComponents, dao: DAO, config: Config)(implicit ec: ExecutionContext)
+class AppController @Inject() (cc: ControllerComponents, dao: DAO, config: Config, ws: WSClient)(implicit ec: ExecutionContext)
   extends Authorizable(cc, dao, config) {
 
   import scala.concurrent.Future.{ successful => future }
 
+  val contractViewer = new ContractViewver(config)
+
+  val priceGetter = new PriceGetter(ws)
+
   def index = Action.async { implicit request =>
     implicit val ac = new AppContext()
-    future(Ok(views.html.app.index()))
+    optionalAuthorized { accountOpt =>
+      priceGetter.futureResult flatMap { price =>
+        future(Ok(views.html.app.index(
+          contractViewer.price,
+          contractViewer.hadrcap,
+          price,
+          contractViewer.contract)))
+      }
+    }
   }
 
   def controlForceUpdate() = Action.async { implicit request =>
     implicit val ac = new AppContext()
-    future(Ok(views.html.app.forceUpdate()))
+    onlyAuthorized { account =>
+      future(Ok(views.html.app.forceUpdate()))
+    }
   }
 
 }

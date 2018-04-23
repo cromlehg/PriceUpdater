@@ -3,19 +3,32 @@ package tasks
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.DurationInt
 
+import com.typesafe.config.Config
+
 import akka.actor.ActorSystem
-import controllers.AppConstants
+import eth.contracts.PriceGetter
+import eth.contracts.PriceUpdater
 import javax.inject.Inject
 import models.daos.DAO
+import play.Logger
+import play.api.libs.ws.WSClient
 
-class BaseActorTask @Inject() (actorSystem: ActorSystem, val dao: DAO)(implicit executionContext: ExecutionContext) {
+class BaseActorTask @Inject() (actorSystem: ActorSystem, val dao: DAO, config: Config, ws: WSClient)(implicit executionContext: ExecutionContext) {
 
-  actorSystem.scheduler.schedule(initialDelay = 1.minutes, interval = AppConstants.INTERVAL_TASK.toInt.milliseconds) {
+  val priceUpdater = new PriceUpdater(config)
 
-  }
+  val priceGetter = new PriceGetter(ws)
 
-  actorSystem.scheduler.schedule(initialDelay = 2.minutes, interval = AppConstants.INTERVAL_TASK.toInt.milliseconds) {
-
+  actorSystem.scheduler.schedule(initialDelay = 0.seconds, interval = 1.minute) {
+    Logger.debug("Request for price processing...")
+    priceGetter.futureResult map { result =>
+      Logger.debug("Ethereum price - " + result + "$")
+      val toUpdate = result.replace(".", "")
+      Logger.debug("To update - " + toUpdate)
+      //priceUpdater.updatePrice(toUpdate)
+      Logger.debug("Price has been updated")
+    }
+    Logger.debug("Price processed")
   }
 
 }
